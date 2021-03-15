@@ -1,0 +1,61 @@
+// Create Task & Get the Task ID
+newtask = Map();
+newtask.put("Subject","Complete Signed-App Process for " + dealname);
+newtask.put("Status","Not Started");
+newtask.put("$se_module","Deals");
+newtask.put("What_Id",dealid);
+newtask.put("Due_Date",addBusinessDay(today,5));
+createTask = zoho.crm.createRecord("Tasks",newtask);
+info createTask;
+taskid = createTask.get("id");
+
+// Get a List of Active Users
+userslist = invokeurl
+[
+	url :"https://www.zohoapis.com/crm/v2/users"
+	type :GET
+	parameters:{"type":"ActiveUsers"}
+	connection:"zohocrm_oauth_connection"
+];
+users = userslist.get("users");
+
+// Make a List of Users with the Service Agent Profile and Get the Size
+serviceusers = List();
+for each  u in users
+{
+	if(u.get("profile").get("name").contains("Service Agent"))
+	{
+		serviceusers.add(u.get("id"));
+	}
+}
+size = size(serviceusers);
+info size;
+
+// Assign the New Owner ID on a Round Robin Pattern
+tasklist = zoho.crm.searchRecords("Tasks","(Subject:starts_with:" + "Complete Signed-App Process for" + ")");
+//
+if(size(tasklist) = 1)
+{
+	newownerid = serviceusers.get(0);
+}
+else
+{
+	// Get the previous task owner ID
+	previousownerid = tasklist.get(1).get("Owner").get("id");
+	info previousownerid;
+	// Find the index of the Previous Owner ID in the Service Users list
+	previousindex = serviceusers.indexOf(previousownerid);
+	info previousindex;
+	// Use Modulus to set new Index value
+	nextindex = (previousindex + 1) % size;
+	info nextindex;
+	// Match the indexes to get the right new Owner ID.
+	newownerid = serviceusers.get(nextindex);
+	info newownerid;
+}
+
+// Update the Created Task with the new Owner ID
+mp = Map();
+mp.put("Owner",newownerid);
+update = zoho.crm.updateRecord("Tasks",taskid,mp);
+info update;
