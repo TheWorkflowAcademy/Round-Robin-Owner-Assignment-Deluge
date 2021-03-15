@@ -39,7 +39,7 @@ userslist = invokeurl
 users = userslist.get("users");
 ```
 
-### Make a List of Users with the Service Agent Profile and get the Size
+### Make a List of Users with the Service Agent Profile and Get the Size
 Iterate through the *userlist* and create a new list consisting of only Service Agents (change this to whatever user profile you need).
 
 ```javascript
