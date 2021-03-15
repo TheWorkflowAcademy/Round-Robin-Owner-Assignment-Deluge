@@ -1,4 +1,4 @@
-# Manual-Round-Robin-Assigner-Deluge
+# Round-Robin-Owner-Assignment-Deluge
 Assign records (tasks) on a round robin pattern via a Deluge script in Zoho CRM.
 
 ## Core Idea
