@@ -50,7 +50,23 @@ info size;
 * If the size of the *tasklist* is 1, it means that it is the first iteration (there is no previous task).
   * Here, we assign the owner by simply getting the first index of the *serviceusers* list.
 * If the *tasklist* size is more than 1,
-  * Get the previous task owner ID (get
+  * Get the previous task owner ID
+	* A list begins from index 0 and by default, the records are sorted by descending order of created time.
+	* So, if you `get(0)`, you'll get the most recent task. But what we need is the **previous task**, so, we `get(1)`.
+  * Find the index of the Previous Owner ID in the Service Users list
+  	* We already have the owner ID of the previous task.
+  	* By using the `indexOf` function, we can get identify the index number of the previous task owner in the *serviceusers* list.
+  * Use Modulus to set new Index value
+  	* We now have the index number of the previous task owner. To get the index number of the next owner, we just need + 1.
+  	* However, we can't just keep adding 1 as the number will exceed the list size.
+  	* Here's where we use a mathematical operation called **modulus (%)**
+  	* **Modulus** will in a way, sort of create a loop that keeps the index number running according to the list size.
+  		* E.g. if the list size is 5, it will go 0,1,2,3,4,0,1,2,3,4...
+  		* [Click here](https://blog.mattclemente.com/2019/07/12/modulus-operator-modulo-operation.html) to read more about the concept of modulus and how it works.
+  * Match the indexes to get the right new Owner ID
+  	* We already have the next index number.
+  	* To get the ID of the user, use the `.get()` function.
+  	* At this point, you have the ID of the owner, ready for update!
 
 ```javascript
 tasklist = zoho.crm.searchRecords("Tasks","(Subject:starts_with:" + "Complete Signed-App Process for" + ")");
@@ -61,6 +77,7 @@ if(size(tasklist) = 1)
 }
 else
 {
+	// Get the previous task owner ID
 	previousownerid = tasklist.get(1).get("Owner").get("id");
 	info previousownerid;
 	// Find the index of the Previous Owner ID in the Service Users list
