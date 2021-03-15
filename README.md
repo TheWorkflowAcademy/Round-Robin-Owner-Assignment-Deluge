@@ -13,7 +13,17 @@ Here's an example scenario: When a Deal stage is updated to "Process Completed",
 ## Tutorial
 ### Create Task
 In the first part of the script, we create the task. Remember, we need a way to identify the task type - it could be by using the subject or a custom field. In this example, we're using the subject. Every task created will have a prefix of "Complete Signed-App Process for" as the subject. 
-*Note: The script to create task is not shown here*
+```javascript
+newtask = Map();
+newtask.put("Subject","Complete Signed-App Process for " + dealname);
+newtask.put("Status","Not Started");
+newtask.put("$se_module","Deals");
+newtask.put("What_Id",dealid);
+newtask.put("Due_Date",addBusinessDay(today,5));
+createTask = zoho.crm.createRecord("Tasks",newtask);
+info createTask;
+taskid = createTask.get("id");
+```
 
 ### Get a List of Active Users
 Use a Zoho CRM API call to get a list of Active Users in the system.
@@ -90,4 +100,13 @@ else
 	newownerid = serviceusers.get(nextindex);
 	info newownerid;
 }
+```
+
+### Update the Created Task with the new Owner ID
+
+```javascript
+mp = Map();
+mp.put("Owner",newownerid);
+update = zoho.crm.updateRecord("Tasks",taskid,mp);
+info update;
 ```
