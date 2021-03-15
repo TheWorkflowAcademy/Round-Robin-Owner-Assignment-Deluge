@@ -11,8 +11,8 @@ Here's an example scenario: When a Deal stage is updated to "Process Completed",
   * ZohoCRM.settings.ALL
 
 ## Tutorial
-### Create Task
-In the first part of the script, we create the task. Remember, we need a way to identify the task type - it could be by using the subject or a custom field. In this example, we're using the subject. Every task created will have a prefix of "Complete Signed-App Process for" as the subject. 
+### Create Task & Get the Task ID
+In the first part of the script, we create the task. Remember, we need a way to identify the task type - it could be by using the subject or a custom field. In this example, we're using the subject. Every task created will have a prefix of "Complete Signed-App Process for" as the subject. Get the Task ID for later.
 ```javascript
 newtask = Map();
 newtask.put("Subject","Complete Signed-App Process for " + dealname);
