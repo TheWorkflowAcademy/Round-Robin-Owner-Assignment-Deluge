@@ -72,7 +72,7 @@ info size;
   	* Here's where we use a mathematical operation called **modulus (%)**
   	* **Modulus** will in a way, sort of create a loop that keeps the index number running according to the list size.
   		* E.g. if the list size is 5, it will go 0,1,2,3,4,0,1,2,3,4...
-  		* [Click here](https://blog.mattclemente.com/2019/07/12/modulus-operator-modulo-operation.html) to read more about the concept of modulus and how it works.
+  		* [Click here](https://blog.mattclemente.com/2019/07/12/modulus-operator-modulo-operation.html) to learn more about modular arithmetic.
   * Match the indexes to get the right new Owner ID
   	* We already have the next index number.
   	* To get the ID of the user, use the `.get()` function.
