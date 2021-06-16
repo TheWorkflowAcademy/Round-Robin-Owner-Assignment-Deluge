@@ -1,14 +1,3 @@
-// Create Task & Get the Task ID
-newtask = Map();
-newtask.put("Subject","Complete Signed-App Process for " + dealname);
-newtask.put("Status","Not Started");
-newtask.put("$se_module","Deals");
-newtask.put("What_Id",dealid);
-newtask.put("Due_Date",addBusinessDay(today,5));
-createTask = zoho.crm.createRecord("Tasks",newtask);
-info createTask;
-taskid = createTask.get("id");
-
 // Get a List of Active Users
 userslist = invokeurl
 [
@@ -36,7 +25,7 @@ tasklist = zoho.crm.searchRecords("Tasks","(Subject:starts_with:" + "Complete Si
 //
 if(size(tasklist) = 1)
 {
-	newownerid = serviceusers.get(0);
+	ownerid = serviceusers.get(0);
 }
 else
 {
@@ -50,12 +39,17 @@ else
 	nextindex = (previousindex + 1) % size;
 	info nextindex;
 	// Match the indexes to get the right new Owner ID.
-	newownerid = serviceusers.get(nextindex);
-	info newownerid;
+	ownerid = serviceusers.get(nextindex);
+	info ownerid;
 }
 
-// Update the Created Task with the new Owner ID
-mp = Map();
-mp.put("Owner",newownerid);
-update = zoho.crm.updateRecord("Tasks",taskid,mp);
-info update;
+// Create Task & Get the Task ID
+newtask = Map();
+newtask.put("Subject","Complete Signed-App Process for " + dealname);
+newtask.put("Status","Not Started");
+newtask.put("$se_module","Deals");
+newtask.put("What_Id",dealid);
+newtask.put("Due_Date",addBusinessDay(today,5));
+newtask.put("Owner",ownerid);
+createTask = zoho.crm.createRecord("Tasks",newtask);
+info createTask;
