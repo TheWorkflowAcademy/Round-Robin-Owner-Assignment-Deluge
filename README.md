@@ -11,19 +11,6 @@ Here's an example scenario: When a Deal stage is updated to "Process Completed",
   * ZohoCRM.settings.ALL
 
 ## Tutorial
-### Create Task & Get the Task ID
-In the first part of the script, we create the task. Remember, we need a way to identify the task type - it could be by using the subject or a custom field. In this example, we're using the subject. Every task created will have a prefix of "Complete Signed-App Process for" as the subject. Get the Task ID for later.
-```javascript
-newtask = Map();
-newtask.put("Subject","Complete Signed-App Process for " + dealname);
-newtask.put("Status","Not Started");
-newtask.put("$se_module","Deals");
-newtask.put("What_Id",dealid);
-newtask.put("Due_Date",addBusinessDay(today,5));
-createTask = zoho.crm.createRecord("Tasks",newtask);
-info createTask;
-taskid = createTask.get("id");
-```
 
 ### Get a List of Active Users
 Use a Zoho CRM API call to get a list of Active Users in the system.
@@ -83,7 +70,7 @@ tasklist = zoho.crm.searchRecords("Tasks","(Subject:starts_with:" + "Complete Si
 //
 if(size(tasklist) = 1)
 {
-	newownerid = serviceusers.get(0);
+	ownerid = serviceusers.get(0);
 }
 else
 {
@@ -97,16 +84,22 @@ else
 	nextindex = (previousindex + 1) % size;
 	info nextindex;
 	// Match the indexes to get the right new Owner ID.
-	newownerid = serviceusers.get(nextindex);
-	info newownerid;
+	ownerid = serviceusers.get(nextindex);
+	info ownerid;
 }
 ```
 
-### Update the Created Task with the new Owner ID
-
+### Create Task
+Now that we have the *ownerid* ready, we can create the task assigned to the correct owner.
 ```javascript
-mp = Map();
-mp.put("Owner",newownerid);
-update = zoho.crm.updateRecord("Tasks",taskid,mp);
-info update;
+newtask = Map();
+newtask.put("Subject","Complete Signed-App Process for " + dealname);
+newtask.put("Status","Not Started");
+newtask.put("$se_module","Deals");
+newtask.put("What_Id",dealid);
+newtask.put("Due_Date",addBusinessDay(today,5));
+newtask.put("Owner",ownerid);
+createTask = zoho.crm.createRecord("Tasks",newtask);
+info createTask;
+taskid = createTask.get("id");
 ```
