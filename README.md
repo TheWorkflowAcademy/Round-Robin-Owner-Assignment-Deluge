@@ -83,7 +83,7 @@ else
 	// Use Modulus to set new Index value
 	nextindex = (previousindex + 1) % size;
 	info nextindex;
-	// Match the indexes to get the right new Owner ID.
+	// Use the Index to get the new Owner ID.
 	ownerid = serviceusers.get(nextindex);
 	info ownerid;
 }
