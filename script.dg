@@ -23,14 +23,14 @@ info size;
 // Assign the New Owner ID on a Round Robin Pattern
 tasklist = zoho.crm.searchRecords("Tasks","(Subject:starts_with:" + "Complete Signed-App Process for" + ")");
 //
-if(size(tasklist) = 1)
+if(size(tasklist) == 0)
 {
 	ownerid = serviceusers.get(0);
 }
 else
 {
 	// Get the previous task owner ID
-	previousownerid = tasklist.get(1).get("Owner").get("id");
+	previousownerid = tasklist.get(0).get("Owner").get("id");
 	info previousownerid;
 	// Find the index of the Previous Owner ID in the Service Users list
 	previousindex = serviceusers.indexOf(previousownerid);
@@ -38,7 +38,7 @@ else
 	// Use Modulus to set new Index value
 	nextindex = (previousindex + 1) % size;
 	info nextindex;
-	// Match the indexes to get the right new Owner ID.
+	// Use the Index get the new Owner ID.
 	ownerid = serviceusers.get(nextindex);
 	info ownerid;
 }
