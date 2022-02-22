@@ -44,12 +44,12 @@ info size;
 
 ### Assign the New Owner ID on a Round Robin Pattern
 * We use the `searchRecords` function to get the *tasklist* of all tasks with subject that starts with the specific prefix.
-* If the size of the *tasklist* is 1, it means that it is the first iteration (there is no previous task).
+* If the size of the *tasklist* is 0, it means that this will be the first task ever created for the category.
   * Here, we assign the owner by simply getting the first index of the *serviceusers* list.
-* If the *tasklist* size is more than 1,
+* If the *tasklist* size is more than 0,
   * Get the previous task owner ID
 	* A list begins from index 0 and by default, the records are sorted by descending order of created time.
-	* So, if you `get(0)`, you'll get the most recent task. But what we need is the **previous task**, so, we `get(1)`.
+	* When you `get(0)`, you'll get the most recent task.
   * Find the index of the Previous Owner ID in the Service Users list
   	* We already have the owner ID of the previous task.
   	* By using the `indexOf` function, we can get identify the index number of the previous task owner in the *serviceusers* list.
@@ -68,14 +68,14 @@ info size;
 ```javascript
 tasklist = zoho.crm.searchRecords("Tasks","(Subject:starts_with:" + "Complete Signed-App Process for" + ")");
 //
-if(size(tasklist) = 1)
+if(size(tasklist) == 0)
 {
 	ownerid = serviceusers.get(0);
 }
 else
 {
 	// Get the previous task owner ID
-	previousownerid = tasklist.get(1).get("Owner").get("id");
+	previousownerid = tasklist.get(0).get("Owner").get("id");
 	info previousownerid;
 	// Find the index of the Previous Owner ID in the Service Users list
 	previousindex = serviceusers.indexOf(previousownerid);
